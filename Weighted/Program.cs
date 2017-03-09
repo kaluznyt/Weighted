@@ -11,7 +11,7 @@ namespace Weighted
     {
         static void Main(string[] args)
         {
-            var union = new WeightedQuickUnionUFWrapper(150);
+            var union = new WeightedQuickUnionUFWrapper(100);
 
             //union.open(0, 0);
             //union.open(1, 0);
@@ -154,9 +154,10 @@ namespace Weighted
             }
         }
 
-        public void printStatistics()
+        public void printStatistics(bool cls = false)
         {
-            //Console.Clear();
+            if (cls)
+                Console.Clear();
             Console.WriteLine("Percolates ? " + percolates());
             Console.WriteLine("Number of compontents: " + _weightedUnionUF.count);
 
@@ -176,13 +177,24 @@ namespace Weighted
 
                     if (_weightedUnionUF.connected(_weightedUnionUF.parent[i * N + x], _virtualTopSite))
                     {
-                        Console.BackgroundColor = 
-                         (ConsoleColor) new Random(new object().GetHashCode()).Next(1,14);
+                        //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(12, 15);
+                        Console.BackgroundColor = ConsoleColor.Red;
                         Console.Write(" ");
                         Console.ResetColor();
                     }
+                    else if (_sites[i, x] == true)
+                    {
+                        //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(1, 3);
+                        Console.BackgroundColor = ConsoleColor.DarkBlue;
+
+                        Console.Write(" ");
+                        Console.ResetColor();
+
+                    }
                     else
-                        Console.Write(_sites[i, x] == true ? "o" : ".");
+                    {
+                        Console.Write(" ");
+                    }
                 }
 
                 Console.WriteLine();
