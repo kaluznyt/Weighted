@@ -13,13 +13,20 @@ namespace Weighted
             Top, Bottom, Left, Right
         }
 
+        private IPrinter _printer;
+
         private readonly WeightedQuickUnionUF _weightedUnionUF;
+
+        public int ComponentsCount => this._weightedUnionUF.count;
+        public int SitesCount => this._sites.Length;
+        public int OpenedSitesCount => _openedSites;
+        public int ClosedSitesCount => SitesCount - OpenedSitesCount;
 
         private readonly bool[,] _sites;
 
         private int _openedSites = 0;
 
-        private readonly int N;
+        public readonly int N;
 
         private readonly int _virtualTopSite;
 
@@ -35,6 +42,12 @@ namespace Weighted
             _virtualBottomSite = len + 1;
 
             _weightedUnionUF = new WeightedQuickUnionUF(len + 2);
+            _printer = new ConsolePrinter(this);
+        }
+
+        public bool IsInPercolationPath(int x)
+        {
+            return _weightedUnionUF.connected(_weightedUnionUF.parent[x], _virtualTopSite);
         }
 
         private int ValueAt(int row, int col)
@@ -65,7 +78,7 @@ namespace Weighted
             }
         }
 
-        private bool IsSiteOpen(int row, int col)
+        public bool IsSiteOpen(int row, int col)
         {
             // 'virtual' sites always open
             if (row == -1 || row == N) return true;
@@ -104,89 +117,7 @@ namespace Weighted
                 OpenRandomSite();
             }
 
-            PrintLargeSiteOverview();
+            _printer.PrintLargeSiteOverview();
         }
-
-        #region Console Printers
-        private void PrintStatistics(bool cls = false)
-        {
-            if (cls) Console.Clear();
-            Console.WriteLine("Percolates ? " + Percolates());
-            Console.WriteLine("Number of compontents: " + _weightedUnionUF.count);
-
-            Console.WriteLine(
-                "Sites: {0} / Opened: {1} / Closed: {2}",
-                _sites.Length,
-                _openedSites,
-                _sites.Length - _openedSites);
-        }
-
-        private void PrintLargeSiteOverview()
-        {
-            Console.Clear();
-
-            for (int i = 0; i < N; i++)
-            {
-                for (int x = 0; x < N; x++)
-                {
-                    if (x == 0) Console.Write(i.ToString().PadLeft(3) + ": ");
-
-                    if (_weightedUnionUF.connected(_weightedUnionUF.parent[i * N + x], _virtualTopSite))
-                    {
-                        ConsoleColor c = i < N * 0.3 ? ConsoleColor.Yellow : i < N * 0.5 ? ConsoleColor.Red : ConsoleColor.DarkRed;
-                        //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(12, 15);
-                        PrintColorSpace(c);
-                    }
-                    else if (_sites[i, x] == true)
-                    {
-                        //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(1, 3);
-                        PrintColorSpace(ConsoleColor.DarkCyan);
-                    }
-                    else
-                    {
-                        Console.Write(" ");
-                    }
-                }
-
-                Console.WriteLine();
-            }
-
-            PrintStatistics();
-        }
-
-        private void PrintColorSpace(ConsoleColor color = ConsoleColor.Black)
-        {
-            Console.BackgroundColor = color;
-            Console.Write(" ");
-            Console.ResetColor();
-        }
-
-        private void PrintOpenSites()
-        {
-            Console.Clear();
-
-            for (int i = 0; i < N; i++)
-            {
-                Console.Write("    {0}", i);
-            }
-
-            Console.WriteLine();
-
-            for (int i = 0; i < N; i++)
-            {
-                for (int x = 0; x < N; x++)
-                {
-                    if (x == 0) Console.Write(i + ":");
-                    Console.Write(_sites[i, x] == true ? " [x] " : " [ ] ");
-                }
-
-                Console.WriteLine();
-            }
-
-            Console.WriteLine("Number of compontents: " + _weightedUnionUF.count);
-            Console.WriteLine("Percolates ? " + Percolates());
-        }
-
-        #endregion Console Printers
     }
 }

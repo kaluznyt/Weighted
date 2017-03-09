@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsolePrinter.cs" />
+    <Compile Include="IPrinter.cs" />
     <Compile Include="WeightedQuickUnionUFWrapper.cs" />
     <Compile Include="WeightedQuickUnionUF.cs" />
     <Compile Include="Program.cs" />

@@ -13,7 +13,7 @@ namespace Weighted
 
         static void Main(string[] args)
         {
-            var union = new WeightedQuickUnionUFWrapper(120);
+            var union = new WeightedQuickUnionUFWrapper(999);
 
             //union.open(0, 0);
             //union.open(1, 0);
