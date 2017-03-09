@@ -9,11 +9,12 @@ namespace Weighted
 {
     class Program
     {
-
-
         static void Main(string[] args)
         {
-            var union = new WeightedQuickUnionUFWrapper(999);
+            //IPrinter printer = new ConsolePrinter();
+            IPrinter printer = new TextFilePrinter($"percolations{DateTime.UtcNow:yyyyMMddHHmmss}.txt");
+
+            //var union = new WeightedQuickUnionUFWrapper(50, printer);
 
             //union.open(0, 0);
             //union.open(1, 0);
@@ -30,7 +31,11 @@ namespace Weighted
             //union.open(8, 0);
             //union.open(9, 0);
 
-            union.StartSimulation();
+            //union.StartSimulation();
+
+            var results =  WeightedQuickUnionUFWrapper.Simulate(1, 500, printer);
+
+            var openedSitesCountAvg = results.Average(sr => sr.OpenedSitesCount);
 
             Console.ReadKey();
         }

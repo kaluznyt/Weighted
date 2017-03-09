@@ -9,5 +9,7 @@ namespace Weighted
     public interface IPrinter
     {
         void PrintLargeSiteOverview();
+
+        void SetAlgorithm(WeightedQuickUnionUFWrapper algo);
     }
 }

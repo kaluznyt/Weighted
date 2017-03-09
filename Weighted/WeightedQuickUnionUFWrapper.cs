@@ -13,14 +13,7 @@ namespace Weighted
             Top, Bottom, Left, Right
         }
 
-        private IPrinter _printer;
-
-        private readonly WeightedQuickUnionUF _weightedUnionUF;
-
-        public int ComponentsCount => this._weightedUnionUF.count;
-        public int SitesCount => this._sites.Length;
-        public int OpenedSitesCount => _openedSites;
-        public int ClosedSitesCount => SitesCount - OpenedSitesCount;
+        private readonly IPrinter _printer;
 
         private readonly bool[,] _sites;
 
@@ -32,7 +25,14 @@ namespace Weighted
 
         private readonly int _virtualBottomSite;
 
-        public WeightedQuickUnionUFWrapper(int n)
+        private readonly WeightedQuickUnionUF _weightedUnionUF;
+
+        public int ComponentsCount => this._weightedUnionUF.count;
+        public int SitesCount => this._sites.Length;
+        public int OpenedSitesCount => _openedSites;
+        public int ClosedSitesCount => SitesCount - OpenedSitesCount;
+
+        public WeightedQuickUnionUFWrapper(int n, IPrinter printer)
         {
             N = n;
             _sites = new bool[n, n];
@@ -42,7 +42,8 @@ namespace Weighted
             _virtualBottomSite = len + 1;
 
             _weightedUnionUF = new WeightedQuickUnionUF(len + 2);
-            _printer = new ConsolePrinter(this);
+            _printer = printer;
+            _printer.SetAlgorithm(this);
         }
 
         public bool IsInPercolationPath(int x)
@@ -110,6 +111,30 @@ namespace Weighted
             }
         }
 
+        public class SimulationResults
+        {
+            public int ComponentsCount { get; set; }
+            public int SitesCount { get; set; }
+            public int OpenedSitesCount { get; set; }
+            public int ClosedSitesCount { get; set; }
+        }
+
+        public static ICollection<SimulationResults> Simulate(int times, int n, IPrinter printer = null)
+        {
+            var results = new List<SimulationResults>();
+
+            for (int i = 0; i < times; i++)
+            {
+                var wrapper = new WeightedQuickUnionUFWrapper(n, printer);
+
+                wrapper.StartSimulation();
+
+                results.Add(wrapper.ProvideResults());
+            }
+
+            return results;
+        }
+
         public void StartSimulation()
         {
             while (!Percolates())
@@ -117,7 +142,25 @@ namespace Weighted
                 OpenRandomSite();
             }
 
-            _printer.PrintLargeSiteOverview();
+            if (_printer != null)
+                _printer.PrintLargeSiteOverview();
+            //_printer.PrintLargeSiteOverview();
+        }
+
+        public SimulationResults ProvideResults()
+        {
+            if (Percolates())
+            {
+                return new SimulationResults
+                {
+                    SitesCount = this.SitesCount,
+                    OpenedSitesCount = this.OpenedSitesCount,
+                    ClosedSitesCount = this.ClosedSitesCount,
+                    ComponentsCount = this.ComponentsCount
+                };
+            }
+
+            return null;
         }
     }
 }

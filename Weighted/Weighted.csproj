@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ConsolePrinter.cs" />
     <Compile Include="IPrinter.cs" />
+    <Compile Include="TextFilePrinter.cs" />
     <Compile Include="WeightedQuickUnionUFWrapper.cs" />
     <Compile Include="WeightedQuickUnionUF.cs" />
     <Compile Include="Program.cs" />

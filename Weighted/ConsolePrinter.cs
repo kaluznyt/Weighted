@@ -10,10 +10,6 @@ namespace Weighted
     {
         private WeightedQuickUnionUFWrapper _algo;
 
-        public ConsolePrinter(WeightedQuickUnionUFWrapper algo)
-        {
-            _algo = algo;
-        }
 
         #region Console Printers
         private void PrintStatistics(bool cls = false)
@@ -47,13 +43,13 @@ namespace Weighted
                                          ConsoleColor.DarkRed;
 
                         //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(12, 15);
-                        PrintColorSpace(c);
+                        PrintColoredSpace(c);
                     }
                     //else if (_sites[i, x] == true)
                     else if (_algo.IsSiteOpen(i, x))
                     {
                         //Console.BackgroundColor = (ConsoleColor)new Random(new object().GetHashCode()).Next(1, 3);
-                        PrintColorSpace(ConsoleColor.DarkCyan);
+                        PrintColoredSpace(ConsoleColor.DarkCyan);
                     }
                     else
                     {
@@ -67,11 +63,16 @@ namespace Weighted
             PrintStatistics();
         }
 
-        private void PrintColorSpace(ConsoleColor color = ConsoleColor.Black)
+        private void PrintColoredSpace(ConsoleColor color = ConsoleColor.Black)
         {
             Console.BackgroundColor = color;
             Console.Write(" ");
             Console.ResetColor();
+        }
+
+        public void SetAlgorithm(WeightedQuickUnionUFWrapper algo)
+        {
+            _algo = algo;
         }
 
         //private void PrintOpenSites()
@@ -99,7 +100,6 @@ namespace Weighted
         //    Console.WriteLine("Number of compontents: " + _weightedUnionUF.count);
         //    Console.WriteLine("Percolates ? " + Percolates());
         //}
-
 
         #endregion Console Printers
     }
