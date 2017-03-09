@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WeightedQuickUnionUFWrapper.cs" />
     <Compile Include="WeightedQuickUnionUF.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +54,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Image\201703091236.PNG" />
+    <Content Include="Image\201703091336.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
